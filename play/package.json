@@ -1,0 +1,18 @@
+{
+  "name": "play",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue-jsx": "^2.1.1",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@packages/ui": "workspace:^1.0.0"
+  }
+}

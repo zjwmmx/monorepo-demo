@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <button id="upload">上传</button>
+    <input id="file" type="file" />
+    <a href="" id="down" download="https://third-short-video.oss-cn-hangzhou.aliyuncs.com/video/2022-12-09/1aade8e9b3524b0eb923fb4cbdcee849.mp4">下载</a>
+    <!--导入SDK文件-->
+    <script
+      type="text/javascript"
+      src="https://gosspublic.alicdn.com/aliyun-oss-sdk-6.16.0.min.js"
+    ></script>
+    <script type="text/javascript">
+      // "accessKeyId": "STS.NUFzxFZWgqks3kAbeBs4pQ5vs",
+      // "accessKeySecret": "5UCru7kHhGitwFBRFCXAWDcunauzijximg3ua5AuwQQp",
+      // "bucket": "third-short-video",
+      // "endPoint": "oss-cn-hangzhou.aliyuncs.com",
+      // "expiration": "2022-12-09T09:56:17Z",
+      // "region": "oss-cn-hangzhou",
+      // "securityToken": "CAISzQJ1q6Ft5B2yfSjIr5bzMcLyt4hGxqmYMU3whmUXf7tcvvDdkTz2IHxKfHJvCOwXtfU2m2BZ7fsclqp0UIQdi8Ztt2wovPpt6gqET9freqXXhOV2Q/THdEGXDxnkpoCwB8zyUNLafNq0dlnAjVUd6LDmdDKkLTvHVJqSksxfc8gwVAu1ZiY8HbUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+14d0q202Z+b8QGMzg+4mPMVpp79Z4OkaNNweYl+X9qym/J3eqfGl3QIsUIPrf0z1P0DoTuYsI+TW1RYvx/Yb7qFqIxifF5yPPU0EfdOp6KnzaA+v/SPtfyukU0Tbb0IDHSOGdz7mpGaIo7zaIZlL4ScEm/Wz9WCOqPytw4Zen8BPGtIAYF9dCcrVk1wG2qLc/D3qQuXPB3ATLOelbo2zJx7wlT4L0RXgMl7st8agAGc2uT+FWH10RMbLqRMd3q0siqJuaSTOItj2zsG1J1Z/3+dyN46gCnvbBMxsYYdUtKrW+rZboBhSIFP5sfxfKQayYcHX9NBpsY5wKhN4zSBCfWPP1D81nVbDekf8lIrKH/gsqlcYwl6r4phmHDWZd915UFbVhvQ4L+eGya0zyH8Mw==",
+      // "videoPath": "video/2022-12-09/0d7f6f0ea4b648929e89c25fb1bc2305.mp4"
+      const client = new OSS({
+        // yourRegion填写Bucket所在地域。以华东1（杭州）为例，yourRegion填写为oss-cn-hangzhou。
+        region: 'oss-cn-hangzhou',
+        // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
+        accessKeyId: 'STS.NUFzxFZWgqks3kAbeBs4pQ5vs',
+        accessKeySecret: '5UCru7kHhGitwFBRFCXAWDcunauzijximg3ua5AuwQQp',
+        // 从STS服务获取的安全令牌（SecurityToken）。
+        stsToken: 'CAISzQJ1q6Ft5B2yfSjIr5bzMcLyt4hGxqmYMU3whmUXf7tcvvDdkTz2IHxKfHJvCOwXtfU2m2BZ7fsclqp0UIQdi8Ztt2wovPpt6gqET9freqXXhOV2Q/THdEGXDxnkpoCwB8zyUNLafNq0dlnAjVUd6LDmdDKkLTvHVJqSksxfc8gwVAu1ZiY8HbUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+14d0q202Z+b8QGMzg+4mPMVpp79Z4OkaNNweYl+X9qym/J3eqfGl3QIsUIPrf0z1P0DoTuYsI+TW1RYvx/Yb7qFqIxifF5yPPU0EfdOp6KnzaA+v/SPtfyukU0Tbb0IDHSOGdz7mpGaIo7zaIZlL4ScEm/Wz9WCOqPytw4Zen8BPGtIAYF9dCcrVk1wG2qLc/D3qQuXPB3ATLOelbo2zJx7wlT4L0RXgMl7st8agAGc2uT+FWH10RMbLqRMd3q0siqJuaSTOItj2zsG1J1Z/3+dyN46gCnvbBMxsYYdUtKrW+rZboBhSIFP5sfxfKQayYcHX9NBpsY5wKhN4zSBCfWPP1D81nVbDekf8lIrKH/gsqlcYwl6r4phmHDWZd915UFbVhvQ4L+eGya0zyH8Mw==',
+        // 填写Bucket名称。
+        bucket: 'third-short-video',
+        secure: true,
+      });
+
+      // 从输入框获取file对象，例如<input type="file" id="file" />。
+      let data;
+      // 创建并填写Blob数据。
+      //const data = new Blob(['Hello OSS']);
+      // 创建并填写OSS Buffer内容。
+      //const data = new OSS.Buffer(['Hello OSS']);
+
+      const upload = document.getElementById("upload");
+
+      const headers = {
+        // 指定该Object被下载时网页的缓存行为。
+        // 'Cache-Control': 'no-cache',
+        // 指定该Object被下载时的名称。
+        // 'Content-Disposition': 'oss_download.txt',
+        // 指定该Object被下载时的内容编码格式。
+        // 'Content-Encoding': 'UTF-8',
+        // 指定过期时间。
+        // 'Expires': 'Wed, 08 Jul 2022 16:57:01 GMT',
+        // 指定Object的存储类型。
+        // 'x-oss-storage-class': 'Standard',
+        // 指定Object的访问权限。
+        // 'x-oss-object-acl': 'private',
+        // 设置Object的标签，可同时设置多个标签。
+        // 'x-oss-tagging': 'Tag1=1&Tag2=2',
+        // 指定CopyObject操作时是否覆盖同名目标Object。此处设置为true，表示禁止覆盖同名Object。
+        // 'x-oss-forbid-overwrite': 'true',
+   };
+
+       async function putObject (data) {
+         try {
+           // 填写Object完整路径。Object完整路径中不能包含Bucket名称。
+           // 您可以通过自定义文件名（例如exampleobject.txt）或文件完整路径（例如exampledir/exampleobject.txt）的形式实现将数据上传到当前Bucket或Bucket中的指定目录。
+           // data对象可以自定义为file对象、Blob数据或者OSS Buffer。
+          const result = await client.put(
+            "video/2022-12-09/0d7f6f0ea4b648929e89c25fb1bc2305.mp4",
+            data,
+            {}
+          );
+          console.log(result);
+          const down = document.getElementById("down");
+          
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      upload.addEventListener("click", () => {
+        data = document.getElementById("file").files[0];
+        console.log(data)
+        putObject(data);
+      });
+    </script>
+  </body>
+</html>
